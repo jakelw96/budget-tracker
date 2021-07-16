@@ -16,7 +16,7 @@ request.onsuccess = function(event) {
 
     // check if application is online or not
     if (navigator.onLine) {
-        // uploadBudget();
+        uploadBudget();
     }
 };
 
