@@ -1,6 +1,20 @@
 let transactions = [];
 let myChart;
 
+// Checks if user will allow notifications
+Notification.requestPermission(function(status) {
+  console.log('Notification status:', status)
+});
+
+// Displays notification when user adds or subtracts from budget
+function renderNotification() {
+  if (Notification.permission == 'granted') {
+    navigator.serviceWorker.getRegistration().then(function(reg) {
+      reg.showNotification('Budget updated!')
+    })    
+  }
+};
+
 fetch("/api/transaction")
   .then(response => {
     return response.json();
@@ -121,7 +135,8 @@ function sendTransaction(isAdding) {
       "Content-Type": "application/json"
     }
   })
-  .then(response => {    
+  .then(response => { 
+    renderNotification();  
     return response.json();
   })
   .then(data => {
@@ -143,6 +158,8 @@ function sendTransaction(isAdding) {
     amountEl.value = "";
   });
 }
+
+
 
 document.querySelector("#add-btn").onclick = function() {
   sendTransaction(true);
